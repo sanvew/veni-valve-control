@@ -17,19 +17,20 @@ const ALLOWED_HOSTS = [
 const SERIAL_PORT = '/dev/ttyACM0';
 const SERIAL_BAUD_RATE = 9600;
 
+const valvesState = {
+  valve0: 'close',
+  valve1: 'close',
+};
+
 /*
   HTTP server setup
 */
 const httpServer = http.createServer(function(req, res) {
   if (ALLOWED_HOSTS.includes(req.headers.host)) {
     fs.readFile('index.html', function(err, data) {
-      console.log(`Handled request from ${req.headers.host}`);
+      // console.log(`Handled request from ${req.headers.host}`);
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.write(data);
-      // serialPort.write(Buffer.from('test\n', 'ascii'), function(err) {
-      //   if (err) console.error(`Error: ${err.message}`);
-      //   console.log('message written');
-      // });
       return res.end();
     });
   } else {
@@ -61,23 +62,48 @@ serialPort.open(function(err) {
   }));
   lineStream.on('data', function(data) {
     console.log(`${SERIAL_PORT}: IN: ${data}`);
+    if (/^\d+?:(open|close)$/.test(data)) {
+      valvesState[`valve${data.match(/\d+?/)[0]}`] =
+        data.match(/(open|close)$/)[0];
+      console.log('Valves state:', valvesState);
+      notifyWsClients();
+    }
   });
-  // serialPort.write('test\n', function(err) {
-  //   if (err) console.error(`Error: ${err.message}`);
-  //   console.log('message written');
-  // });
 });
 
 
 /*
- WebSocket setup
+ WebSockets setup
 */
+const wsClients = new Set();
 const wsServer = new WebSocketServer({httpServer});
 wsServer.on('request', function(request) {
-  console.log('Websocket client connected!');
+  // TODO: add id for ws client
+  // let clientCounter = 0;
   const connection = request.accept(null, request.origin);
+  wsClients.add(connection);
+
+  // send initial states
+  connection.send(JSON.stringify(valvesState));
+
   connection.on('message', function(message) {
-    console.log(message.utf8Data);
-    serialPort.write('0:toggle');
+    console.log(`WsClient sent data: ${message.utf8Data}`);
+    const msg = JSON.parse(message.utf8Data);
+    for (key of Object.keys(msg)) {
+      if (/^valve\d+?$/.test(key)) {
+        // extract valve number
+        valveNum = key.match(/\d+?$/)[0];
+        serialData = `${valveNum}:${msg[key]}`;
+        console.log(`${SERIAL_PORT}: OUT: ${serialData}`);
+        serialPort.write(serialData);
+      }
+    }
   });
 });
+
+function notifyWsClients() {
+  // publish updated states
+  for (const client of wsClients) {
+    client.send(JSON.stringify(valvesState));
+  }
+}
