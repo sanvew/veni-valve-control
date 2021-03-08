@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <style>
+      body > object {
+        width: 100%
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" integrity="sha512-B4skI5FiLurS86aioJx9VfozI1wjqrn6aTdJH+YQUmCZum/ZibPBTX55k5d9XM6EsKePDInkLVrN7vPmJxc1qA==" crossorigin="anonymous"></script>
+    <script>
+      window.addEventListener('load', function () {
+        // const socket = new ReconnectingWebSocket('ws://rpi-veni000:8080');
+        let valvesState = {};
+        const valve0CheckBox = document.getElementById('valve0');
+        const valve1CheckBox = document.getElementById('valve1');
+        const valveCircuitSVG = document.getElementById('valve-circuit');
+        console.log(JSON.stringify(valveCircuitSVG))
+        const valveRight = valveCircuitSVG.contentDocument.getElementById('valve-right')
+        valveRight.addEventListener('click', function() {
+
+        });
+        //console.log(s);
+          //rightValve = svgDoc.getElementById('right-valve')
+          //console.log(rightValve);
+          //rightValve.addEventListener('mousedown', function() {
+           // alert("lol");
+        socket.onmessage = function(event) {
+          valvesState = JSON.parse(event.data);
+          valve0CheckBox.checked = valvesState.valve0 == 'open' ? true : false;
+          valve1CheckBox.checked = valvesState.valve1 == 'open' ? true : false;
+        };
+        valve0CheckBox.onclick = function() {
+          socket.send(JSON.stringify({valve0: 'toggle'}));
+        };
+        valve1CheckBox.onclick = function() {
+          socket.send(JSON.stringify({valve1: 'toggle'}));
+        };
+      });
+    </script>
+
+    <object id="valve-circuit" data="svg/valve-circuit.svg" type="image/svg+xml"/>
+  </body>
+</html>
