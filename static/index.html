@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <!-- <link rel="preload" href="svg/valve-r_open.svg" as="image"> -->
+    <!-- <link rel="preload" href="svg/valve-r_close.svg" as="image"> -->
+  </head>
   <body>
     <style>
       body > object {
@@ -9,32 +13,47 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js" integrity="sha512-B4skI5FiLurS86aioJx9VfozI1wjqrn6aTdJH+YQUmCZum/ZibPBTX55k5d9XM6EsKePDInkLVrN7vPmJxc1qA==" crossorigin="anonymous"></script>
     <script>
       window.addEventListener('load', function () {
-        // const socket = new ReconnectingWebSocket('ws://rpi-veni000:8080');
+        const socket = new ReconnectingWebSocket('ws://rpi-veni000.local:8080');
         let valvesState = {};
-        const valve0CheckBox = document.getElementById('valve0');
-        const valve1CheckBox = document.getElementById('valve1');
         const valveCircuitSVG = document.getElementById('valve-circuit');
-        console.log(JSON.stringify(valveCircuitSVG))
-        const valveRight = valveCircuitSVG.contentDocument.getElementById('valve-right')
-        valveRight.addEventListener('click', function() {
+        const svgDoc = valveCircuitSVG.contentDocument;
 
-        });
-        //console.log(s);
-          //rightValve = svgDoc.getElementById('right-valve')
-          //console.log(rightValve);
-          //rightValve.addEventListener('mousedown', function() {
-           // alert("lol");
+        const valveRight = svgDoc.getElementById('valve-0');
+        valveRight.addEventListener('click', function() {
+          socket.send(JSON.stringify({valve0: 'toggle'}));
+        }, false);
+
+        const valveLeft = svgDoc.getElementById('valve-1');
+        valveLeft.addEventListener('click', function() {
+          socket.send(JSON.stringify({valve1: 'toggle'}));
+        }, false);
+
+        const valveBig = svgDoc.getElementById('valve-2');
+        valveBig.addEventListener('click', function() {
+          socket.send(JSON.stringify({valve2: 'toggle'}));
+        }, false);
+
         socket.onmessage = function(event) {
           valvesState = JSON.parse(event.data);
-          valve0CheckBox.checked = valvesState.valve0 == 'open' ? true : false;
-          valve1CheckBox.checked = valvesState.valve1 == 'open' ? true : false;
-        };
-        valve0CheckBox.onclick = function() {
-          socket.send(JSON.stringify({valve0: 'toggle'}));
-        };
-        valve1CheckBox.onclick = function() {
-          socket.send(JSON.stringify({valve1: 'toggle'}));
-        };
+
+          if (valvesState.valve0 == 'open') {
+            valveRight.setAttribute('href', 'valve-r_open.svg');
+          } else {
+            valveRight.setAttribute('href', 'valve-r_close.svg');
+          }
+
+          if (valvesState.valve1 == 'open') {
+            valveLeft.setAttribute('href', 'valve-l_open.svg');
+          } else {
+            valveLeft.setAttribute('href', 'valve-l_close.svg');
+          }
+
+          if (valvesState.valve2 == 'open') {
+            valveBig.setAttribute('href', 'valve-big_open.svg');
+          } else {
+            valveBig.setAttribute('href', 'valve-big_close.svg');
+          }
+        }
       });
     </script>
 

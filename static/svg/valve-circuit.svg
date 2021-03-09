@@ -9,7 +9,8 @@
     <path d="M592.9 440.7H427.9V468.4H592.9V440.7Z" fill="#CFCFCF" stroke="#B0B0B0" stroke-width="7" stroke-miterlimit="10"/>
     <path d="M942.1 440.9H862.7V468.6H942.1V440.9Z" fill="#CFCFCF" stroke="#B0B0B0" stroke-width="7" stroke-miterlimit="10"/>
     <path d="M824.6 440.7H634.1V468.4H697.9C707.3 468.4 715 476 715 485.5V565H742.6V485.5C742.6 476.1 750.2 468.4 759.7 468.4H824.6V440.7Z" fill="#CFCFCF" stroke="#625E60" stroke-width="7" stroke-miterlimit="10"/>
-    <image id="valve-right" x="576" y="566" width="378" height="254" href="valve-r_open.svg"/>
+    <!-- Controlled valve -->
+    <image id="valve-0" x="576" y="566" width="378" height="254" href="valve-r_close.svg"/>
     <path d="M712.4 1087.9L714.6 819.5H742.3L740.1 1087.9H712.4Z" fill="#CFCFCF" stroke="#B0B0B0" stroke-width="7" stroke-miterlimit="10"/>
     <path d="M385.3 498.5H400.5V410.6H385.3V498.5Z" fill="#CFCFCF" stroke="#625E60" stroke-width="7" stroke-miterlimit="10"/>
     <path d="M402.5 428.3C404.3 428.3 405.7 429.7 405.7 431.5V477.5C405.7 479.3 404.3 480.7 402.5 480.7V428.3Z" fill="#CFCFCF" stroke="#625E60" stroke-width="2" stroke-miterlimit="10"/>
@@ -58,6 +59,9 @@
     <path d="M941.3 187.3C943 187.3 944.7 187.6 946.2 188.3C947.8 189 949.1 190 950.3 191.3C952.7 194 954 197.5 954 201.1C954 204.7 952.7 208.2 950.3 210.9C949.2 212.2 947.8 213.2 946.2 213.9C944.6 214.6 943 214.9 941.3 214.9H934.6V228.8H927.2V187.4H941.3V187.3ZM941.3 207.2C942 207.2 942.7 207.1 943.4 206.7C944.1 206.4 944.6 205.9 945.1 205.4C946.1 204.2 946.7 202.6 946.7 201C946.8 199.4 946.2 197.8 945.1 196.6C944.6 196 944.1 195.6 943.4 195.3C942.7 195 942 194.8 941.3 194.8H934.6V207.1H941.3V207.2Z" fill="#137A3A"/>
     <path d="M979 228.8L976.8 221.4H962.4L960.3 228.8H952.3L965 187.4H974.2L986.9 228.8H979ZM964.7 213.9H974.7L969.7 196.6L964.7 213.9Z" fill="#137A3A"/>
     <path d="M269 1029H1112V1325C1112 1339.9 1099.9 1352 1085 1352H296C281.1 1352 269 1339.9 269 1325V1029Z" fill="url(#paint0_linear)" fill-opacity="0.7" stroke="#908A88" stroke-width="6"/>
+    <!-- Controlled valve -->
+    <image id="valve-1" x="94" y="522" width="382" height="252" href="valve-l_close.svg"/>
+    <image id="valve-2" x="74" y="1024" width="214" height="330" href="valve-big_close.svg"/>
     <defs>
         <linearGradient id="paint0_linear" x1="690.5" y1="1355" x2="690.5" y2="1142.5" gradientUnits="userSpaceOnUse">
             <stop stop-color="#33C0C9"/>

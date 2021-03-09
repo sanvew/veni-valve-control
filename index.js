@@ -1,4 +1,5 @@
 const http = require('http');
+const static = require('node-static');
 const fs = require('fs');
 const WebSocketServer = require('websocket').server;
 const SerialPort = require('serialport');
@@ -13,6 +14,7 @@ const ALLOWED_HOSTS = [
   `localhost:${SERVER_PORT}`,
   `127.0.0.1:${SERVER_PORT}`,
   `rpi-veni000:${SERVER_PORT}`,
+  `rpi-veni000.local:${SERVER_PORT}`,
 ];
 const SERIAL_PORT = '/dev/ttyACM0';
 const SERIAL_BAUD_RATE = 9600;
@@ -20,19 +22,24 @@ const SERIAL_BAUD_RATE = 9600;
 const valvesState = {
   valve0: 'close',
   valve1: 'close',
+  valve2: 'close',
 };
 
 /*
   HTTP server setup
 */
+const staticFiles = new static.Server('./static');
 const httpServer = http.createServer(function(req, res) {
   if (ALLOWED_HOSTS.includes(req.headers.host)) {
-    fs.readFile('index.html', function(err, data) {
-      // console.log(`Handled request from ${req.headers.host}`);
-      res.writeHead(200, {'Content-Type': 'text/html'});
-      res.write(data);
-      return res.end();
-    });
+    // fs.readFile('static/index.html', function(err, data) {
+    //   // console.log(`Handled request from ${req.headers.host}`);
+    //   res.writeHead(200, {'Content-Type': 'text/html'});
+    //   res.write(data);
+    //   return res.end();
+    // });
+    req.addListener('end', function () {
+      staticFiles.serve(req, res);
+    }).resume();
   } else {
     console.error(`Bad origin host: ${req.headers.host}! Access denied!`);
   }

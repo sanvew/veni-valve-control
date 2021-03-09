@@ -1,6 +1,6 @@
 SERIAL_PORT=/dev/ttyACM0
 FQBN=arduino:avr:uno
-RPI_ADDR=rpi-veni000
+RPI_ADDR=rpi-veni000.local
 
 .PHONY: compile
 compile:

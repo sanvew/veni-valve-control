@@ -1,13 +1,13 @@
 const int BUAD_RATE = 9600;
 
-const byte NUM_OF_VALVES = 2;
+const byte NUM_OF_VALVES = 3;
 // false - open, true - closed
 #define VALVE_OPEN 0
 #define VALVE_CLOSE 1
-boolean VALVES_STATE[] = {VALVE_CLOSE, VALVE_CLOSE};
+boolean VALVES_STATE[] = {VALVE_CLOSE, VALVE_CLOSE, VALVE_CLOSE};
 // 1st element - opening pin, 2nd element - closing pin
-const byte VALVES_PINS[NUM_OF_VALVES][2] = { {2, 3}, {4, 5} };
-const int VALVES_DELAYS[] = {1000, 1000};
+const byte VALVES_PINS[NUM_OF_VALVES][2] = { {2, 3}, {4, 5}, {6, 7} };
+const int VALVES_DELAYS[] = {1000, 1000, 1000};
 
 void setup() {
     Serial.begin(BUAD_RATE);
@@ -20,7 +20,7 @@ void setup() {
 
 void loop() {
     /*
-     * serial messages format: {valve_number}:{command}
+     * serial message format: {valve_number}:{command}
      * valve_number: [0, NUM_OF_VALVES)
      * command: {open, close, toggle}
      */
